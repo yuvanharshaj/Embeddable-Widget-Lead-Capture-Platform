@@ -11,11 +11,11 @@
 
   // Create a container
   const container = document.createElement('div');
-  container.id = \`widget-container-\${widgetId}\`;
+  container.id = `widget-container-${widgetId}`;
   currentScript.parentNode.insertBefore(container, currentScript.nextSibling);
 
   // Fetch config
-  fetch(\`\${baseUrl}/widgets/\${widgetId}/config\`)
+  fetch(`${baseUrl}/widgets/${widgetId}/config`)
     .then(res => res.json())
     .then(config => {
       if (config.error) {
@@ -104,7 +104,7 @@
       btn.disabled = true;
       btn.innerText = 'Submitting...';
 
-      fetch(\`\${baseUrl}/submissions\`, {
+      fetch(`${baseUrl}/submissions`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

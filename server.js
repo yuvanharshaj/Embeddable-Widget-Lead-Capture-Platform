@@ -52,8 +52,8 @@ app.post('/api/widgets', authMiddleware, async (req, res) => {
     );
     
     const widget = rows[0];
-    const baseUrl = process.env.BASE_URL || \`http://\${req.get('host')}\`;
-    widget.embed_snippet = \`<script src="\${baseUrl}/widget.js?id=\${widget.id}"></script>\`;
+    const baseUrl = process.env.BASE_URL || `http://${req.get('host')}`;
+    widget.embed_snippet = `<script src="${baseUrl}/widget.js?id=${widget.id}"></script>`;
     
     res.status(201).json(widget);
   } catch (err) {
@@ -99,7 +99,7 @@ const fetchGeo = async (ip) => {
   
   try {
     // Provider A: ip-api.com
-    const resA = await fetch(\`http://ip-api.com/json/\${ip}\`);
+    const resA = await fetch(`http://ip-api.com/json/${ip}`);
     const dataA = await resA.json();
     if (dataA.status === 'success') {
       return { country: dataA.country, city: dataA.city };
@@ -108,7 +108,7 @@ const fetchGeo = async (ip) => {
   } catch (errA) {
     try {
       // Provider B: ipapi.co
-      const resB = await fetch(\`https://ipapi.co/\${ip}/json/\`);
+      const resB = await fetch(`https://ipapi.co/${ip}/json/`);
       const dataB = await resB.json();
       if (dataB.country_name) {
         return { country: dataB.country_name, city: dataB.city };
@@ -126,13 +126,14 @@ const triggerSideEffect = async (submissionId) => {
   try {
     // Simulate webhook/email that might fail
     if (Math.random() < 0.1) throw new Error('Simulated side effect failure');
-    console.log(\`[Side Effect] Successfully processed side effect for submission \${submissionId}\`);
+    console.log(`[Side Effect] Successfully processed side effect for submission ${submissionId}`);
   } catch (err) {
-    console.error(\`[Side Effect Error] Failed for submission \${submissionId}, but main flow continues.\`);
+    console.error(`[Side Effect Error] Failed for submission ${submissionId}, but main flow continues.`);
   }
 };
 
 // 4 & 5. Public Submission Endpoint
+app.options('/submissions', cors());
 app.post('/submissions', cors(), submissionLimiter, async (req, res) => {
   const { widget_id, data, _honeypot } = req.body;
   
@@ -193,7 +194,7 @@ if (require.main === module) {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, async () => {
     await setupDB();
-    console.log(\`Server listening on port \${PORT}\`);
+    console.log(`Server listening on port ${PORT}`);
   });
 }
 

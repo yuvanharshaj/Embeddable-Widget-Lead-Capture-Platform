@@ -19,7 +19,7 @@ describe('Widget API Tests', () => {
   });
 
   it('should accept CORS preflight', async () => {
-    const res = await request(app).options('/submissions');
+    const res = await request(app).options('/submissions').set('Origin', 'http://example.com');
     expect(res.headers['access-control-allow-origin']).toBe('*'); // Or matching origin
     expect(res.status).toBe(204);
   });
@@ -69,7 +69,7 @@ describe('Widget API Tests', () => {
     });
     // Limit is 10
     for (let i = 0; i < 10; i++) {
-        await request(app).post('/submissions').send({ widget_id: '123', data: { email: \`test\${i}@test.com\` } });
+        await request(app).post('/submissions').send({ widget_id: '123', data: { email: `test${i}@test.com` } });
     }
     const res = await request(app).post('/submissions').send({ widget_id: '123', data: { email: 'rate@test.com' } });
     expect(res.status).toBe(429);
