@@ -50,7 +50,12 @@ app.post('/api/widgets', authMiddleware, async (req, res) => {
       'INSERT INTO widgets (id, user_id, title, description, fields, button_text) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *',
       [id, req.user.id, title, description, JSON.stringify(fields), button_text]
     );
-    res.status(201).json(rows[0]);
+    
+    const widget = rows[0];
+    const baseUrl = process.env.BASE_URL || \`http://\${req.get('host')}\`;
+    widget.embed_snippet = \`<script src="\${baseUrl}/widget.js?id=\${widget.id}"></script>\`;
+    
+    res.status(201).json(widget);
   } catch (err) {
     res.status(500).json({ error: 'Failed to create widget' });
   }
