@@ -1,0 +1,8 @@
+run: "npm start"
+seed: "node seed.js"
+test: "npm test"
+base_url: "http://localhost:3000"
+endpoints:
+  - "/api/widgets"
+  - "/widgets/:id/config"
+  - "/submissions"
